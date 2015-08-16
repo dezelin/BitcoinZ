@@ -27,7 +27,10 @@ module TestSocketClient =
                 (fun (buffer, read, callback) -> callback (buffer))
         
         [<ClassInitialize>]
-        static member tearUp (context : TestContext) = SocketServer.start server |> ignore
+        static member tearUp (context : TestContext) = 
+            SocketServer.start server
+            |> Async.RunSynchronously
+            |> ignore
         
         [<ClassCleanup>]
         static member tearDown() = ()
@@ -57,3 +60,4 @@ module TestSocketClient =
             |> Async.RunSynchronously
             |> ignore
             connection.Dispose()
+

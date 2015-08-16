@@ -47,10 +47,14 @@ module SocketServer =
                 with _ -> ignore()
                 do! loop()
             }
-        Async.Start(loop(), cancellationToken = cancelTokenSource.Token)
-        { // Return disposable handle
-          new IDisposable with
-              member x.Dispose() = 
-                  cancelTokenSource.Cancel()
-                  listener.Close() }
+        async { 
+            Async.Start(loop(), cancellationToken = cancelTokenSource.Token)
+            let connection = 
+                { // Return disposable handle
+                  new IDisposable with
+                      member x.Dispose() = 
+                          cancelTokenSource.Cancel()
+                          listener.Close() }
+            return connection
+        }
 
