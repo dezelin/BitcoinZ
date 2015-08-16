@@ -50,16 +50,19 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Content Include="app.config" />
     <Compile Include="AssemblyInfo.fs" />
     <None Include="Script.fsx" />
+    <Compile Include="ByteOrder.fs" />
+    <Compile Include="BitcoinProtocol.fs" />
     <Compile Include="DnsSeed.fs" />
     <Compile Include="Socket.fs" />
     <Compile Include="SocketServer.fs" />
     <Compile Include="SocketClient.fs" />
     <Compile Include="Peer.fs" />
     <Compile Include="TestTemplate.fs" />
+    <Compile Include="TestByteOrder.fs" />
     <Compile Include="TestDnsSeed.fs" />
-    <Content Include="app.config" />
     <Compile Include="TestSocketClient.fs" />
   </ItemGroup>
   <ItemGroup>
