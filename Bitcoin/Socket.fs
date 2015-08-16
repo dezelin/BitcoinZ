@@ -3,17 +3,13 @@
 open System.Net
 open System.Net.Sockets
 
-module Socket =
-
+module Socket = 
     type internal Socket with
-        
         member x.AsyncAccept() = Async.FromBeginEnd(x.BeginAccept, x.EndAccept)
-
-        member x.AsyncConnect(endpoint: IPEndPoint) = 
+        member x.AsyncConnect(endpoint : IPEndPoint) = 
             Async.FromBeginEnd
-                (endpoint, 
-                 (fun (endpoint: IPEndPoint, callback, state) -> 
-                 x.BeginConnect(endpoint, callback, state)), x.EndConnect)
+                (endpoint, (fun (endpoint : IPEndPoint, callback, state) -> x.BeginConnect(endpoint, callback, state)), 
+                 x.EndConnect)
         
         member x.AsyncReceive(buffer : byte [], ?offset, ?count) = 
             let offset = defaultArg offset 0
@@ -30,5 +26,6 @@ module Socket =
                 (buffer, offset, count, 
                  (fun (buffer, offset, count, callback, state) -> 
                  x.BeginSend(buffer, offset, count, SocketFlags.None, callback, state)), x.EndSend)
-
+    
     type T = Socket
+

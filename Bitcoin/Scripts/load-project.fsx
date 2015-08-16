@@ -1,0 +1,15 @@
+// Warning: generated file; your changes could be lost when a new file is generated.
+#I __SOURCE_DIRECTORY__
+#load @"load-references.fsx"
+#load @"..\AssemblyInfo.fs"
+      @"..\ByteOrder.fs"
+      @"..\BitcoinProtocol.fs"
+      @"..\DnsSeed.fs"
+      @"..\Socket.fs"
+      @"..\SocketServer.fs"
+      @"..\SocketClient.fs"
+      @"..\Peer.fs"
+      @"..\TestTemplate.fs"
+      @"..\TestByteOrder.fs"
+      @"..\TestDnsSeed.fs"
+      @"..\TestSocketClient.fs"

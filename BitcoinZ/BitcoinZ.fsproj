@@ -57,6 +57,8 @@
     <None Include="App.config" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Program.fs" />
+    <None Include="Scripts\load-references.fsx" />
+    <None Include="Scripts\load-project.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
