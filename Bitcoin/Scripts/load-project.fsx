@@ -2,6 +2,8 @@
 #I __SOURCE_DIRECTORY__
 #load @"load-references.fsx"
 #load @"..\AssemblyInfo.fs"
+      @"..\Agent.fs"
+      @"..\BlockingQueueAgent.fs"
       @"..\ByteOrder.fs"
       @"..\BitcoinProtocol.fs"
       @"..\DnsSeed.fs"

@@ -53,6 +53,8 @@
     <Content Include="app.config" />
     <Compile Include="AssemblyInfo.fs" />
     <None Include="Script.fsx" />
+    <Compile Include="Agent.fs" />
+    <Compile Include="BlockingQueueAgent.fs" />
     <Compile Include="ByteOrder.fs" />
     <Compile Include="BitcoinProtocol.fs" />
     <Compile Include="DnsSeed.fs" />
