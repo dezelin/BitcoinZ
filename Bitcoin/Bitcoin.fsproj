@@ -53,9 +53,14 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="Script.fsx" />
     <Compile Include="DnsSeed.fs" />
-    <Content Include="app.config" />
+    <Compile Include="Socket.fs" />
+    <Compile Include="SocketServer.fs" />
+    <Compile Include="SocketClient.fs" />
+    <Compile Include="Peer.fs" />
     <Compile Include="TestTemplate.fs" />
     <Compile Include="TestDnsSeed.fs" />
+    <Content Include="app.config" />
+    <Compile Include="TestSocketClient.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />

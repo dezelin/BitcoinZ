@@ -12,6 +12,10 @@ module DnsSeed =
         "seed.bitcoinstats.com" 
         ]
 
+    let private testnetSeedUrls = [
+        "testnet-seed.bitcoin.petertodd.org"
+        ]
+
     let fetchAsync (url : string) = 
         async { 
             try
@@ -22,10 +26,14 @@ module DnsSeed =
             with _ -> return [||]
         }
 
-    let fetch() = 
-        seedUrls
+    let private fetchList(urls) = 
+        urls
         |> Seq.map fetchAsync
         |> Async.Parallel
         |> Async.RunSynchronously
         |> Array.concat
 
+    let fetch() = fetchList seedUrls
+
+    let fetchTestnet() = fetchList testnetSeedUrls
+        
