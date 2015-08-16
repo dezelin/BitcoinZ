@@ -52,6 +52,7 @@ module BlockingQueueAgent =
         member x.AsyncAdd(value: 'Msg) =
             agent.PostAndAsyncReply(fun channel -> Add(value, channel))
 
+        // Asynchronously get message from the queue. If the queue is empty blocks.
         member x.AsyncGet() =
             agent.PostAndAsyncReply(Get)
 
