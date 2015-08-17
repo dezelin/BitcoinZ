@@ -1,22 +1,23 @@
 ﻿namespace Bitcoin.Tests
 
-open Microsoft.VisualStudio.TestTools.UnitTesting
+open NUnit.Framework
+open FsUnit
 
 module TestTemplate = 
-    [<TestClass>]
+    [<TestFixture>]
     type T() = 
         
-        [<ClassInitialize>]
-        static member tearUp (context : TestContext) = ()
+        [<TestFixtureSetUp>]
+        static member setup() = ()
         
-        [<ClassCleanup>]
-        static member tearDown() = ()
+        [<TestFixtureTearDown>]
+        static member clean() = ()
         
-        [<TestInitialize>]
-        member x.setup() = ()
+        [<SetUp>]
+        member x.tearUp() = ()
         
-        [<TestCleanup>]
-        member x.clean() = ()
+        [<TearDown>]
+        member x.tearDown() = ()
         
-        [<TestMethod>]
+        [<Test>]
         member x.yourTestName() = ()

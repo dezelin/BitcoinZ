@@ -2,11 +2,12 @@
 
 open System.Net
 open System.Net.Sockets
-open Microsoft.VisualStudio.TestTools.UnitTesting
+open NUnit.Framework
+open FsUnit
 open Bitcoin
 
 module TestSocketClient = 
-    [<TestClass>]
+    [<TestFixture>]
     type T() = 
         
         static let localIp() = 
@@ -26,22 +27,22 @@ module TestSocketClient =
             SocketServer.createFromAddress (new IPAddress(address)) port 
                 (fun (buffer, read, callback) -> callback (buffer))
         
-        [<ClassInitialize>]
-        static member tearUp (context : TestContext) = 
+        [<TestFixtureSetUp>]
+        static member setup() = 
             SocketServer.start server
             |> Async.RunSynchronously
             |> ignore
         
-        [<ClassCleanup>]
-        static member tearDown() = ()
+        [<TestFixtureTearDown>]
+        static member clean() = ()
         
-        [<TestInitialize>]
-        member x.setup() = ()
+        [<SetUp>]
+        member x.tearUp() = ()
         
-        [<TestCleanup>]
-        member x.clean() = ()
+        [<TearDown>]
+        member x.tearDown() = ()
         
-        [<TestMethod>]
+        [<Test>]
         member x.initialize() = 
             let data = "data"B
             
@@ -49,7 +50,7 @@ module TestSocketClient =
                 SocketClient.createFromAddress (IPAddress(address)) port (fun (buffer, read) -> 
                     let bufferStr = System.Text.Encoding.ASCII.GetString buffer
                     let dataStr = System.Text.Encoding.ASCII.GetString data
-                    Assert.AreEqual(bufferStr, dataStr))
+                    bufferStr |> should equal dataStr)
             
             let connection = SocketClient.asyncConnect client |> Async.RunSynchronously
             data
@@ -60,4 +61,3 @@ module TestSocketClient =
             |> Async.RunSynchronously
             |> ignore
             connection.Dispose()
-

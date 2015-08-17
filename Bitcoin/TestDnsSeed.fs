@@ -1,25 +1,26 @@
 ﻿namespace Bitcoin.Tests
 
-open Microsoft.VisualStudio.TestTools.UnitTesting
 open Bitcoin
+open NUnit.Framework
+open FsUnit
 
 module TestDnsSeed = 
-    [<TestClass>]
+    [<TestFixture>]
     type T() = 
         
-        [<ClassInitialize>]
-        static member tearUp (context : TestContext) = ()
+        [<TestFixtureSetUp>]
+        static member setup() = ()
         
-        [<ClassCleanup>]
-        static member tearDown() = ()
+        [<TestFixtureTearDown>]
+        static member clean() = ()
         
-        [<TestInitialize>]
-        member x.setup() = ()
+        [<SetUp>]
+        member x.tearUp() = ()
         
-        [<TestCleanup>]
-        member x.clean() = ()
+        [<TearDown>]
+        member x.tearDown() = ()
         
-        [<TestMethod>]
+        [<Test>]
         member x.fetchAsync() = 
             let runAsync() = 
                 "www.google.com"
@@ -27,10 +28,10 @@ module TestDnsSeed =
                 |> Async.Catch
                 |> Async.RunSynchronously
             match runAsync() with
-            | Choice1Of2(addresses) -> Assert.AreNotEqual(addresses.Length, 0)
+            | Choice1Of2(addresses) -> addresses.Length |> should not' (equal 0)
             | Choice2Of2(ex) -> Assert.Fail()
         
-        [<TestMethod>]
+        [<Test>]
         member x.fetchAsyncError() = 
             let runAsync() = 
                 "xyz"
@@ -38,10 +39,10 @@ module TestDnsSeed =
                 |> Async.Catch
                 |> Async.RunSynchronously
             match runAsync() with
-            | Choice1Of2 addresses -> Assert.AreEqual(addresses.Length, 0)
+            | Choice1Of2 addresses -> addresses.Length |> should equal 0
             | Choice2Of2 ex -> Assert.Fail()
         
-        [<TestMethod>]
+        [<Test>]
         member x.fetch() = 
             let seeds = DnsSeed.fetch()
-            Assert.AreEqual(seeds.Length >= 0, true)
+            seeds.Length |> should be (greaterThanOrEqualTo 0)

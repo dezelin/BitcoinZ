@@ -1,11 +1,12 @@
 ﻿namespace Bitcoin.Tests
 
 open System
-open Microsoft.VisualStudio.TestTools.UnitTesting
 open Bitcoin.ByteOrder
+open NUnit.Framework
+open FsUnit
 
 module TestByteOrder = 
-    [<TestClass>]
+    [<TestFixture>]
     type T() = 
         let lei16 : int16 = 0x0201s
         let lei32 : int32 = 0x04030201l
@@ -20,183 +21,182 @@ module TestByteOrder =
         let beu32 : uint32 = 0x01020304ul
         let beu64 : uint64 = 0x0102030405060708uL
         
-        [<ClassInitialize>]
-        static member tearUp (context : TestContext) = ()
+        [<TestFixtureSetUp>]
+        static member setup() = ()
         
-        [<ClassCleanup>]
-        static member tearDown() = ()
+        [<TestFixtureTearDown>]
+        static member clean() = ()
         
-        [<TestInitialize>]
-        member x.setup() = ()
+        [<SetUp>]
+        member x.tearUp() = ()
         
-        [<TestCleanup>]
-        member x.clean() = ()
+        [<TearDown>]
+        member x.tearDown() = ()
         
-        [<TestMethod>]
-        member x.ByteOrder_letohoi16() = 
+        [<Test>]
+        member x.letohoi16() = 
             let x = letohoi16 lei16
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, lei16)
-            | false -> Assert.AreNotEqual(x, lei16)
+            | true -> x |> should equal lei16
+            | false -> x |> should not' (equal lei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_letohoi32() = 
+        [<Test>]
+        member x.letohoi32() = 
             let x = letohoi32 lei32
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, lei32)
-            | false -> Assert.AreNotEqual(x, lei32)
+            | true -> x |> should equal lei32
+            | false -> x |> should not' (equal lei32)
         
-        [<TestMethod>]
-        member x.ByteOrder_letohoi64() = 
+        [<Test>]
+        member x.letohoi64() = 
             let x = letohoi16 lei16
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, lei16)
-            | false -> Assert.AreNotEqual(x, lei16)
+            | true -> x |> should equal lei16
+            | false -> x |> should not' (equal lei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_letohou16() = 
+        [<Test>]
+        member x.letohou16() = 
             let x = letohou16 leu16
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, leu16)
-            | false -> Assert.AreNotEqual(x, leu16)
+            | true -> x |> should equal leu16
+            | false -> x |> should not' (equal leu16)
         
-        [<TestMethod>]
-        member x.ByteOrder_letohou32() = 
+        [<Test>]
+        member x.letohou32() = 
             let x = letohou32 leu32
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, leu32)
-            | false -> Assert.AreNotEqual(x, leu32)
+            | true -> x |> should equal leu32
+            | false -> x |> should not' (equal leu32)
         
-        [<TestMethod>]
-        member x.ByteOrder_letohou64() = 
+        [<Test>]
+        member x.letohou64() = 
             let x = letohou64 leu64
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, leu64)
-            | false -> Assert.AreNotEqual(x, leu64)
+            | true -> x |> should equal leu64
+            | false -> x |> should not' (equal leu64)
         
-        [<TestMethod>]
-        member x.ByteOrder_betohoi16() = 
+        [<Test>]
+        member x.betohoi16() = 
             let x = betohoi16 bei16
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, bei16)
-            | false -> Assert.AreNotEqual(x, bei16)
+            | true -> x |> should equal bei16
+            | false -> x |> should not' (equal bei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_betohoi32() = 
+        [<Test>]
+        member x.betohoi32() = 
             let x = betohoi32 bei32
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, bei32)
-            | false -> Assert.AreNotEqual(x, bei32)
+            | true -> x |> should equal bei32
+            | false -> x |> should not' (equal bei32)
         
-        [<TestMethod>]
-        member x.ByteOrder_betohoi64() = 
+        [<Test>]
+        member x.betohoi64() = 
             let x = betohoi16 bei16
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, bei16)
-            | false -> Assert.AreNotEqual(x, bei16)
+            | true -> x |> should equal bei16
+            | false -> x |> should not' (equal bei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_betohou16() = 
+        [<Test>]
+        member x.betohou16() = 
             let x = betohou16 beu16
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, beu16)
-            | false -> Assert.AreNotEqual(x, beu16)
+            | true -> x |> should equal beu16
+            | false -> x |> should not' (equal beu16)
         
-        [<TestMethod>]
-        member x.ByteOrder_betohou32() = 
+        [<Test>]
+        member x.betohou32() = 
             let x = betohou32 beu32
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, beu32)
-            | false -> Assert.AreNotEqual(x, beu32)
+            | true -> x |> should equal beu32
+            | false -> x |> should not' (equal beu32)
         
-        [<TestMethod>]
-        member x.ByteOrder_betohou64() = 
+        [<Test>]
+        member x.betohou64() = 
             let x = betohou64 beu64
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, beu64)
-            | false -> Assert.AreNotEqual(x, beu64)
+            | true -> x |> should equal beu64
+            | false -> x |> should not' (equal beu64)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotolei16() = 
+        [<Test>]
+        member x.hotolei16() = 
             let x = hotolei16 lei16
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, lei16)
-            | false -> Assert.AreNotEqual(x, lei16)
+            | true -> x |> should equal lei16
+            | false -> x |> should not' (equal lei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotolei32() = 
+        [<Test>]
+        member x.hotolei32() = 
             let x = hotolei32 lei32
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, lei32)
-            | false -> Assert.AreNotEqual(x, lei32)
+            | true -> x |> should equal lei32
+            | false -> x |> should not' (equal lei32)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotolei64() = 
+        [<Test>]
+        member x.hotolei64() = 
             let x = hotolei16 lei16
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, lei16)
-            | false -> Assert.AreNotEqual(x, lei16)
+            | true -> x |> should equal lei16
+            | false -> x |> should not' (equal lei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotoleu16() = 
+        [<Test>]
+        member x.hotoleu16() = 
             let x = hotoleu16 leu16
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, leu16)
-            | false -> Assert.AreNotEqual(x, leu16)
+            | true -> x |> should equal leu16
+            | false -> x |> should not' (equal leu16)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotoleu32() = 
+        [<Test>]
+        member x.hotoleu32() = 
             let x = hotoleu32 leu32
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, leu32)
-            | false -> Assert.AreNotEqual(x, leu32)
+            | true -> x |> should equal leu32
+            | false -> x |> should not' (equal leu32)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotoleu64() = 
+        [<Test>]
+        member x.hotoleu64() = 
             let x = hotoleu64 leu64
             match BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, leu64)
-            | false -> Assert.AreNotEqual(x, leu64)
+            | true -> x |> should equal leu64
+            | false -> x |> should not' (equal leu64)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotobei16() = 
+        [<Test>]
+        member x.hotobei16() = 
             let x = hotobei16 bei16
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, bei16)
-            | false -> Assert.AreNotEqual(x, bei16)
+            | true -> x |> should equal bei16
+            | false -> x |> should not' (equal bei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotobei32() = 
+        [<Test>]
+        member x.hotobei32() = 
             let x = hotobei32 bei32
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, bei32)
-            | false -> Assert.AreNotEqual(x, bei32)
+            | true -> x |> should equal bei32
+            | false -> x |> should not' (equal bei32)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotobei64() = 
+        [<Test>]
+        member x.hotobei64() = 
             let x = betohoi16 bei16
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, bei16)
-            | false -> Assert.AreNotEqual(x, bei16)
+            | true -> x |> should equal bei16
+            | false -> x |> should not' (equal bei16)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotobeu16() = 
+        [<Test>]
+        member x.hotobeu16() = 
             let x = betohou16 beu16
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, beu16)
-            | false -> Assert.AreNotEqual(x, beu16)
+            | true -> x |> should equal beu16
+            | false -> x |> should not' (equal beu16)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotobeu32() = 
+        [<Test>]
+        member x.hotobeu32() = 
             let x = betohou32 beu32
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, beu32)
-            | false -> Assert.AreNotEqual(x, beu32)
+            | true -> x |> should equal beu32
+            | false -> x |> should not' (equal beu32)
         
-        [<TestMethod>]
-        member x.ByteOrder_hotobeu64() = 
+        [<Test>]
+        member x.hotobeu64() = 
             let x = betohou64 beu64
             match not BitConverter.IsLittleEndian with
-            | true -> Assert.AreEqual(x, beu64)
-            | false -> Assert.AreNotEqual(x, beu64)
-
+            | true -> x |> should equal beu64
+            | false -> x |> should not' (equal beu64)
