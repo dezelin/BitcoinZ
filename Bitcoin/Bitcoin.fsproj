@@ -68,6 +68,7 @@
     <None Include="Scripts\load-references.fsx" />
     <None Include="Scripts\load-project.fsx" />
     <None Include="packages.config" />
+    <Compile Include="TestBlockingQueueAgent.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
