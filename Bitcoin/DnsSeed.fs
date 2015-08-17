@@ -8,7 +8,7 @@ module DnsSeed =
           "seed.bitcoinstats.com" ]
     let private testnetSeedUrls = [ "testnet-seed.bitcoin.petertodd.org" ]
     
-    let fetchAsync (url : string) = 
+    let asyncFetch (url : string) = 
         async { 
             try 
                 let! address = Async.FromBeginEnd
@@ -20,7 +20,7 @@ module DnsSeed =
     
     let private fetchList (urls) = 
         urls
-        |> Seq.map fetchAsync
+        |> Seq.map asyncFetch
         |> Async.Parallel
         |> Async.RunSynchronously
         |> Array.concat

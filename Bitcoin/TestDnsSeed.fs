@@ -24,7 +24,7 @@ module TestDnsSeed =
         member x.fetchAsync() = 
             let runAsync() = 
                 "www.google.com"
-                |> DnsSeed.fetchAsync
+                |> DnsSeed.asyncFetch
                 |> Async.Catch
                 |> Async.RunSynchronously
             match runAsync() with
@@ -35,7 +35,7 @@ module TestDnsSeed =
         member x.fetchAsyncError() = 
             let runAsync() = 
                 "xyz"
-                |> DnsSeed.fetchAsync
+                |> DnsSeed.asyncFetch
                 |> Async.Catch
                 |> Async.RunSynchronously
             match runAsync() with
