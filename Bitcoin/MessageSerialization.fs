@@ -1,32 +1,34 @@
 ﻿namespace Bitcoin
 
+open Bitcoin.ByteOrder
+open Bitcoin.Messages
 open System
 open System.Text
 
-open Bitcoin.ByteOrder
-open Bitcoin.Messages
-
 module MessageSerialization = 
+    let private serializeu32 (x : uint32) = BitConverter.GetBytes(hotoleu32 x)
+    let private serializeCharArray (array : char []) count = 
+        Array.zeroCreate (max (count - array.Length) 0) 
+        |> Array.append (ASCIIEncoding.ASCII.GetBytes(array) |> Array.truncate count)
+    let private deserializeu32 (array : byte []) index = letohou32 (BitConverter.ToUInt32(array, index))
+    let private deserializeCharArray (array : byte []) index count = 
+        ASCIIEncoding.ASCII.GetChars(array, index, count) |> Array.filter (fun x -> x <> char 0)
+    
     let internal serializeHeader (header : MessageHeader) : byte [] = 
         let res = 
-            [ BitConverter.GetBytes(hotoleu32 (uint32 header.magic))
-              // take at most 12 chars
-              ASCIIEncoding.ASCII.GetBytes(header.command) |> Array.truncate 12
-              // pad with null byte the rest of the command up until 12 chars
-              Array.zeroCreate (max (12 - header.command.Length) 0)
-              BitConverter.GetBytes(hotoleu32 header.length)
-              BitConverter.GetBytes(hotoleu32 header.checksum) ]
+            [ serializeu32 (uint32 header.magic)
+              serializeCharArray header.command 12
+              serializeu32 (header.length)
+              serializeu32 (header.checksum) ]
         res |> List.reduce (Array.append)
     
     let internal deserializeHeaderOffset (header : byte []) index : MessageHeader = 
-        { magic = LanguagePrimitives.EnumOfValue(letohou32 (BitConverter.ToUInt32(header, index)))
-          command = ASCIIEncoding.ASCII.GetChars(header, index + 4, 12) |> Array.filter (fun x -> x <> char 0)
-          length = letohou32 (BitConverter.ToUInt32(header, index + 16))
-          checksum = letohou32 (BitConverter.ToUInt32(header, index + 20)) }
-
-    let internal deserializeHeader (header : byte []) : MessageHeader = 
-        deserializeHeaderOffset header 0
-
+        { magic = LanguagePrimitives.EnumOfValue(deserializeu32 header index)
+          command = deserializeCharArray header (index + 4) 12
+          length = deserializeu32 header (index + 16)
+          checksum = deserializeu32 header (index + 20) }
+    
+    let internal deserializeHeader (header : byte []) : MessageHeader = deserializeHeaderOffset header 0
     let serializeMessageAddr (payload : MessageAddr) : byte [] = Array.empty<byte>
     let serializeMessageAlert (payload : MessageAlert) : byte [] = Array.empty<byte>
     let serializeMessageBlock (payload : MessageBlock) : byte [] = Array.empty<byte>
