@@ -2,7 +2,7 @@
 
 open System
 
-module BitcoinProtocol = 
+module Messages = 
     type VarIntByte = 
         { value : uint8 // Should be < 0xfd
                         }
@@ -444,27 +444,27 @@ module BitcoinProtocol =
                               }
     
     type MessagePayload = 
-        | MessageAddr
-        | MessageAlert
-        | MessageBlock
-        | MessageFilterAdd
-        | MessageFilterClear
-        | MessageFilterLoad
-        | MessageGetAddr
-        | MessageGetBlocks
-        | MessageGetData
-        | MessageGetHeaders
-        | MessageHeaders
-        | MessageInv
-        | MessageMemPool
-        | MessageMerkleBlock
-        | MessageNotFound
-        | MessagePing
-        | MessagePong
-        | MessageReject
-        | MessageTx
-        | MessageVerack
-        | MessageVersion
+        | MessageAddrPayload of MessageAddr
+        | MessageAlertPayload of MessageAlert
+        | MessageBlockPayload of MessageBlock
+        | MessageFilterAddPayload of MessageFilterAdd
+        | MessageFilterClearPayload of MessageFilterClear
+        | MessageFilterLoadPayload of MessageFilterLoad
+        | MessageGetAddrPayload of MessageGetAddr
+        | MessageGetBlocksPayload of MessageGetBlocks
+        | MessageGetDataPayload of MessageGetData
+        | MessageGetHeadersPayload of MessageGetHeaders
+        | MessageHeadersPayload of MessageHeaders
+        | MessageInvPayload of MessageInv
+        | MessageMemPoolPayload of MessageMemPool
+        | MessageMerkleBlockPayload of MessageMerkleBlock
+        | MessageNotFoundPayload of MessageNotFound
+        | MessagePingPayload of MessagePing
+        | MessagePongPayload of MessagePong
+        | MessageRejectPayload of MessageReject
+        | MessageTxPayload of MessageTx
+        | MessageVerackPayload of MessageVerack
+        | MessageVersionPayload of MessageVersion
     
     // Bitcoin protocol message
     type BitcoinMessage = 
