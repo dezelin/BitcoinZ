@@ -48,7 +48,7 @@ module TestMessageSerialization =
         [<Test>]
         member x.``deserialized MessageHeader equal to the original message``() = 
             iterMessageHeaders (fun (header, serialized) -> 
-                let deserialized = (deserializeHeader serialized)
+                let deserialized = (deserializeHeader serialized 0)
                 deserialized.magic |> should equal header.magic
                 deserialized.length |> should equal header.length
                 deserialized.checksum |> should equal header.checksum

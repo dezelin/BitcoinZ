@@ -3,33 +3,46 @@
 open System
 
 module Messages = 
+    type VarIntMarker = 
+        | VarIntMarkerShort = 0xfduy
+        | VarIntMarkerInt32 = 0xfeuy
+        | VarIntMarkerInt64 = 0xffuy
+
     type VarIntByte = 
         { value : uint8 // Should be < 0xfd
                         }
     
     type VarIntShort = 
-        { marker : uint8 // Should always be 0xfd
+        { marker : VarIntMarker // Should always be 0xfd
           value : uint16 }
     
     type VarInt32 = 
-        { marker : uint8 // Should always be 0xfe
+        { marker : VarIntMarker // Should always be 0xfe
           value : uint32 }
     
     type VarInt64 = 
-        { marker : uint8 // Should always be 0xff
+        { marker : VarIntMarker // Should always be 0xff
           value : uint64 }
     
     type VarInt = 
-        | VarIntByte
-        | VarIntShort
-        | VarInt32
-        | VarInt64
+        | VarIntByte of VarIntByte
+        | VarIntShort of VarIntShort
+        | VarInt32 of VarInt32
+        | VarInt64 of VarInt64
+
+    let VarIntToInt64 (x: VarInt)  =
+        match x with
+        | VarIntByte v -> uint64 v.value
+        | VarIntShort v -> uint64 v.value
+        | VarInt32 v -> uint64 v.value
+        | VarInt64 v -> uint64 v.value
     
     type VarString = 
         { length : VarInt // Length of the string
           string : char [] // The string itself (can be empty)
                            }
     
+    let internal NetAddrPayloadSize = 30
     type NetAddr = 
         { // the Time (version >= 31402). Not present in version message.
           time : uint32
@@ -40,8 +53,8 @@ module Messages =
           // However, the IPv4 address is written into the message as a 16 byte 
           // IPv4-mapped IPv6 address
           // (12 bytes 00 00 00 00 00 00 00 00 00 00 FF FF, followed by the 4 bytes of the IPv4 address).
-          // char[16] is the maximum length
-          ipv6_4 : char []
+          // byte[16] is the maximum length
+          ipv6_4 : byte []
           // port number, network byte order
           port : uint16 }
     
@@ -59,19 +72,19 @@ module Messages =
         { // Identifies the object type linked to this inventory 
           objectType : InvVecObjectType
           // Hash of the object
-          // char[32] is the length
-          hash : char [] }
+          // byte[32] is the length
+          hash : byte [] }
     
     type BlockHeader = 
         { // Block version information (note, this is signed)
           version : int32
           // The hash value of the previous block this particular block references
           // char[32] is the length
-          prevBlock : char []
+          prevBlock : byte []
           // The reference to a Merkle tree collection which is a hash of 
           // all transactions related to this block
           // char[32] is the length
-          merkleRoot : char []
+          merkleRoot : byte []
           // A timestamp recording when this block was created (Will overflow in 2106)
           timestamp : uint32
           // The calculated difficulty target being used for this block
@@ -197,12 +210,12 @@ module Messages =
           hashCount : VarInt
           // block locator object; newest back to genesis block 
           // (dense to start, but then sparse)
-          // Every hash is char[32] long
-          blockLocatorHashes : char []
+          // Every hash is byte[32] long
+          blockLocatorHashes : byte []
           // hash of the last desired block; set to zero to get as many blocks 
           // as possible (500)
-          // char[32] is the length of the array
-          hashStop : char [] }
+          // byte[32] is the length of the array
+          hashStop : byte [] }
     
     // Return a headers packet containing the headers of blocks starting right 
     // after the last known hash in the block locator object, up to hash_stop 
@@ -220,17 +233,17 @@ module Messages =
           hashCount : VarInt
           // block locator object; newest back to genesis block 
           // (dense to start, but then sparse)
-          // Each hash is a char[32]
-          blockLocatorHashes : char []
+          // Each hash is a byte[32]
+          blockLocatorHashes : byte []
           // hash of the last desired block header; set to zero to get as many 
           // blocks as possible (2000)
-          // The lenght is char[32]
-          hashStop : char [] }
+          // The lenght is byte[32]
+          hashStop : byte [] }
     
     type OutPoint = 
         { // The hash of the referenced transaction.
-          // The length is char[32]
-          hash : char []
+          // The length is byte[32]
+          hash : byte []
           // The index of the specific output in the transaction. 
           // The first output is 0, etc.
           index : uint32 }
@@ -281,12 +294,12 @@ module Messages =
         { // Block version information (note, this is signed)
           version : uint32
           // The hash value of the previous block this particular block references
-          // The length is char[32]
-          prevBlock : char []
+          // The length is byte[32]
+          prevBlock : byte []
           // The reference to a Merkle tree collection which is a hash of all 
           // transactions related to this block
           // The length is char[32]
-          merkleRoot : char []
+          merkleRoot : byte []
           // A Unix timestamp recording when this block was created 
           // (Currently limited to dates before the year 2106!)
           timestamp : uint32
@@ -346,7 +359,7 @@ module Messages =
           // Optional extra data provided by some errors. Currently, all errors 
           // which provide this field fill it with the TXID or block header hash 
           // of the object being rejected, so the field is 32 bytes.
-          data : char [] }
+          data : byte [] }
     
     type MessageFilterLoad = 
         { // The filter itself is simply a bit field of arbitrary byte-aligned size. 
@@ -373,12 +386,12 @@ module Messages =
         { // Block version information, based upon the software version creating this block
           version : uint32
           // The hash value of the previous block this particular block references
-          // The length is char[32]
-          prevBlock : char []
+          // The length is byte[32]
+          prevBlock : byte []
           // The reference to a Merkle tree collection which is a hash of all 
           // transactions related to this block
-          // The length is char[32]
-          merkleRoot : char []
+          // The length is byte[32]
+          merkleRoot : byte []
           // A timestamp recording when this block was created (Limited to 2106!)
           timestamp : uint32
           // The calculated difficulty target being used for this block
@@ -389,8 +402,8 @@ module Messages =
           // Number of transactions in the block (including unmatched ones)
           totalTransactions : uint32
           // hashes in depth-first order (including standard varint size prefix)
-          // Each hash is char[32]
-          hashes : char []
+          // Each hash is byte[32]
+          hashes : byte []
           // flag bits, packed per 8 in a byte, least significant bit first 
           // (including standard varint size prefix)
           flags : byte [] }
@@ -442,29 +455,29 @@ module Messages =
           // An ECDSA signature of the message
           signature : char [] // uchar[] in the protocol specification
                               }
-    
+
     type MessagePayload = 
-        | MessageAddrPayload of MessageAddr
-        | MessageAlertPayload of MessageAlert
-        | MessageBlockPayload of MessageBlock
-        | MessageFilterAddPayload of MessageFilterAdd
-        | MessageFilterClearPayload of MessageFilterClear
-        | MessageFilterLoadPayload of MessageFilterLoad
-        | MessageGetAddrPayload of MessageGetAddr
-        | MessageGetBlocksPayload of MessageGetBlocks
-        | MessageGetDataPayload of MessageGetData
-        | MessageGetHeadersPayload of MessageGetHeaders
-        | MessageHeadersPayload of MessageHeaders
-        | MessageInvPayload of MessageInv
-        | MessageMemPoolPayload of MessageMemPool
-        | MessageMerkleBlockPayload of MessageMerkleBlock
-        | MessageNotFoundPayload of MessageNotFound
-        | MessagePingPayload of MessagePing
-        | MessagePongPayload of MessagePong
-        | MessageRejectPayload of MessageReject
-        | MessageTxPayload of MessageTx
-        | MessageVerackPayload of MessageVerack
-        | MessageVersionPayload of MessageVersion
+        | MessageAddr of MessageAddr
+        | MessageAlert of MessageAlert
+        | MessageBlock of MessageBlock
+        | MessageFilterAdd of MessageFilterAdd
+        | MessageFilterClear of MessageFilterClear
+        | MessageFilterLoad of MessageFilterLoad
+        | MessageGetAddr of MessageGetAddr
+        | MessageGetBlocks of MessageGetBlocks
+        | MessageGetData of MessageGetData
+        | MessageGetHeaders of MessageGetHeaders
+        | MessageHeaders of MessageHeaders
+        | MessageInv of MessageInv
+        | MessageMemPool of MessageMemPool
+        | MessageMerkleBlock of MessageMerkleBlock
+        | MessageNotFound of MessageNotFound
+        | MessagePing of MessagePing
+        | MessagePong of MessagePong
+        | MessageReject of MessageReject
+        | MessageTx of MessageTx
+        | MessageVerack of MessageVerack
+        | MessageVersion of MessageVersion
     
     // Bitcoin protocol message
     type BitcoinMessage = 
