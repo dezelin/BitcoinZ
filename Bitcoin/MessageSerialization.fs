@@ -9,9 +9,17 @@ module MessageSerialization =
     let internal serializeu16 (x : uint16) = BitConverter.GetBytes(hotoleu16 x)
     let internal serializeu32 (x : uint32) = BitConverter.GetBytes(hotoleu32 x)
     let internal serializeu64 (x : uint64) = BitConverter.GetBytes(hotoleu64 x)
+    
     let internal serializeCharArray (array : char []) count = 
-        Array.zeroCreate (max (count - array.Length) 0) 
-        |> Array.append (ASCIIEncoding.ASCII.GetBytes(array) |> Array.toSeq |> Seq.truncate count |> Seq.toArray)
+        match array.Length with
+        | 0 -> Array.zeroCreate count
+        | _ -> 
+            Array.zeroCreate (max (count - array.Length) 0)
+            |> Array.append (ASCIIEncoding.ASCII.GetBytes(array))
+            |> Array.toSeq
+            |> Seq.take count
+            |> Seq.toArray
+    
     let internal deserializeu16 (array : byte []) index = letohou16 (BitConverter.ToUInt16(array, index))
     let internal deserializeu32 (array : byte []) index = letohou32 (BitConverter.ToUInt32(array, index))
     let internal deserializeu64 (array : byte []) index = letohou64 (BitConverter.ToUInt64(array, index))
@@ -44,7 +52,10 @@ module MessageSerialization =
         let list = 
             [ serializeu32 addr.time
               serializeu64 addr.services
-              addr.ipv6_4 |> Array.toSeq |> Seq.truncate 16 |> Seq.toArray
+              addr.ipv6_4
+              |> Array.toSeq
+              |> Seq.take 16
+              |> Seq.toArray
               serializeu16 addr.port ]
         list |> List.reduce (Array.append)
     
@@ -65,6 +76,21 @@ module MessageSerialization =
         loop [] index count
         |> List.rev
         |> List.toArray
+    
+    let internal serializeInvVec (invVec : InvVec) : byte [] = 
+        let list = 
+            [ BitConverter.GetBytes(hotoleu32 (LanguagePrimitives.EnumToValue invVec.objectType))
+              invVec.hash
+              |> Array.toSeq
+              |> Seq.take 32
+              |> Seq.toArray // Hash length is 32 bytes
+                             ]
+        list |> List.reduce (Array.append)
+    
+    let internal deserializeInvVec (array : byte []) index = 
+        { objectType = LanguagePrimitives.EnumOfValue(deserializeu32 array index)
+          hash = array.[index + 4..index + 4 + 31] // Slice 32 bytes of hash
+                                                   }
     
     let internal serializeHeader (header : MessageHeader) : byte [] = 
         let list = 

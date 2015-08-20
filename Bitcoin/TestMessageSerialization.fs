@@ -172,6 +172,18 @@ module TestMessageSerialization =
                 Array.iter2 (fun x y -> x |> should equal y) x.ipv6_4 y.ipv6_4) addresses deserialized
         
         [<Test>]
+        member x.``serialize/deserialize InvVec``() = 
+            let invVec = 
+                { objectType = InvVecObjectType.MSG_BLOCK
+                  hash = Array.create 32 32uy }
+            
+            let serialized = serializeInvVec invVec
+            let deserialized = deserializeInvVec serialized 0
+            invVec.hash.Length |> should equal deserialized.hash.Length
+            invVec.objectType |> should equal deserialized.objectType
+            Array.iter2 (fun x y -> x |> should equal y) invVec.hash deserialized.hash
+        
+        [<Test>]
         member x.``serialized MessageHeader array size``() = 
             iterMessageHeaders (fun (header, serialized) -> serialized.Length |> should equal 24)
         
@@ -185,8 +197,13 @@ module TestMessageSerialization =
                 // header dos not come from deserialization so it can have command
                 // field larger that the maximum of 12 chars as defined in the 
                 // Bitcoin protocol specification
-                if header.command.Length > 12 then deserialized.command |> should not' (equal header.command)
-                deserialized.command |> should equal (header.command
-                                                      |> Array.toSeq
-                                                      |> Seq.truncate 12
-                                                      |> Seq.toArray))
+                match header.command.Length with
+                | len when len <= 12 -> 
+                    header.command.Length |> should equal deserialized.command.Length
+                    Array.iter2 (fun x y -> x |> should equal y) header.command deserialized.command
+                | _ -> 
+                    deserialized.command |> should not' (equal header.command)
+                    Array.iter2 (fun x y -> x |> should equal y) (header.command
+                                                                  |> Array.toSeq
+                                                                  |> Seq.take 12
+                                                                  |> Seq.toArray) deserialized.command)
