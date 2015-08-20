@@ -3,6 +3,8 @@
 open System
 
 module ByteOrder = 
+
+    let seqRev xs = Seq.fold(fun acc x -> x::acc) [] xs
     //
     // Convert from little-endian to host byte order
     //
@@ -10,42 +12,42 @@ module ByteOrder =
         match BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToInt16(bytes, 0)
     
     let letohoi32 x : int32 = 
         match BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToInt32(bytes, 0)
     
     let letohoi64 x : int64 = 
         match BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToInt64(bytes, 0)
     
     let letohou16 x : uint16 = 
         match BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToUInt16(bytes, 0)
     
     let letohou32 x : uint32 = 
         match BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToUInt32(bytes, 0)
     
     let letohou64 x : uint64 = 
         match BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToUInt64(bytes, 0)
     
     //
@@ -55,42 +57,42 @@ module ByteOrder =
         match not BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToInt16(bytes, 0)
     
     let betohoi32 x : int32 = 
         match not BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToInt32(bytes, 0)
     
     let betohoi64 x : int64 = 
         match not BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToInt64(bytes, 0)
     
     let betohou16 x : uint16 = 
         match not BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToUInt16(bytes, 0)
     
     let betohou32 x : uint32 = 
         match not BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToUInt32(bytes, 0)
     
     let betohou64 x : uint64 = 
         match not BitConverter.IsLittleEndian with
         | true -> x
         | false -> 
-            let bytes = Seq.toArray (Seq.rev (BitConverter.GetBytes x))
+            let bytes = Seq.toArray (seqRev (BitConverter.GetBytes x))
             BitConverter.ToUInt64(bytes, 0)
     
     //
@@ -111,4 +113,3 @@ module ByteOrder =
     let hotobeu16 x : uint16 = betohou16 x
     let hotobeu32 x : uint32 = betohou32 x
     let hotobeu64 x : uint64 = betohou64 x
-

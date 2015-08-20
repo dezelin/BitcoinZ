@@ -183,7 +183,10 @@ module TestMessageSerialization =
                 deserialized.length |> should equal header.length
                 deserialized.checksum |> should equal header.checksum
                 // header dos not come from deserialization so it can have command
-                // field larger that the maximal 12 chars as it is defined in the 
+                // field larger that the maximum of 12 chars as defined in the 
                 // Bitcoin protocol specification
                 if header.command.Length > 12 then deserialized.command |> should not' (equal header.command)
-                deserialized.command |> should equal (header.command |> Array.truncate 12))
+                deserialized.command |> should equal (header.command
+                                                      |> Array.toSeq
+                                                      |> Seq.truncate 12
+                                                      |> Seq.toArray))

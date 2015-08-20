@@ -11,7 +11,7 @@ module MessageSerialization =
     let internal serializeu64 (x : uint64) = BitConverter.GetBytes(hotoleu64 x)
     let internal serializeCharArray (array : char []) count = 
         Array.zeroCreate (max (count - array.Length) 0) 
-        |> Array.append (ASCIIEncoding.ASCII.GetBytes(array) |> Array.truncate count)
+        |> Array.append (ASCIIEncoding.ASCII.GetBytes(array) |> Array.toSeq |> Seq.truncate count |> Seq.toArray)
     let internal deserializeu16 (array : byte []) index = letohou16 (BitConverter.ToUInt16(array, index))
     let internal deserializeu32 (array : byte []) index = letohou32 (BitConverter.ToUInt32(array, index))
     let internal deserializeu64 (array : byte []) index = letohou64 (BitConverter.ToUInt64(array, index))
@@ -44,7 +44,7 @@ module MessageSerialization =
         let list = 
             [ serializeu32 addr.time
               serializeu64 addr.services
-              addr.ipv6_4 |> Array.truncate 16
+              addr.ipv6_4 |> Array.toSeq |> Seq.truncate 16 |> Seq.toArray
               serializeu16 addr.port ]
         list |> List.reduce (Array.append)
     

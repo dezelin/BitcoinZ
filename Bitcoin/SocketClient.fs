@@ -66,4 +66,3 @@ module SocketClient =
             let! sent = socket.AsyncSend(buffer, 0, buffer.Length)
             return sent
         }
-

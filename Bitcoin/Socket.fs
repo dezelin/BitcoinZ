@@ -28,4 +28,3 @@ module Socket =
                  x.BeginSend(buffer, offset, count, SocketFlags.None, callback, state)), x.EndSend)
     
     type T = Socket
-

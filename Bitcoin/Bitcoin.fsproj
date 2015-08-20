@@ -56,21 +56,21 @@
     <Compile Include="BlockingQueueAgent.fs" />
     <Compile Include="ByteOrder.fs" />
     <Compile Include="DnsSeed.fs" />
+    <Compile Include="Messages.fs" />
+    <Compile Include="MessageSerialization.fs" />
     <Compile Include="Socket.fs" />
     <Compile Include="SocketServer.fs" />
     <Compile Include="SocketClient.fs" />
     <Compile Include="Peer.fs" />
     <Compile Include="TestTemplate.fs" />
     <Compile Include="TestByteOrder.fs" />
+    <Compile Include="TestBlockingQueueAgent.fs" />
     <Compile Include="TestDnsSeed.fs" />
+    <Compile Include="TestMessageSerialization.fs" />
     <Compile Include="TestSocketClient.fs" />
     <None Include="Scripts\load-references.fsx" />
     <None Include="Scripts\load-project.fsx" />
     <None Include="packages.config" />
-    <Compile Include="TestBlockingQueueAgent.fs" />
-    <Compile Include="Messages.fs" />
-    <Compile Include="MessageSerialization.fs" />
-    <Compile Include="TestMessageSerialization.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

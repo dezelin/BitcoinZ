@@ -200,51 +200,39 @@ module TestByteOrder =
             match not BitConverter.IsLittleEndian with
             | true -> x |> should equal beu64
             | false -> x |> should not' (equal beu64)
-
+        
         [<Test>]
-        member x.```hotolei16/letohoi16``() =
-            lei16 |> should equal (hotolei16 (letohoi16 lei16))
-
+        member x.```hotolei16/letohoi16``() = lei16 |> should equal (hotolei16 (letohoi16 lei16))
+        
         [<Test>]
-        member x.```hotolei32/letohoi32``() =
-            lei32 |> should equal (hotolei32 (letohoi32 lei32))
-
+        member x.```hotolei32/letohoi32``() = lei32 |> should equal (hotolei32 (letohoi32 lei32))
+        
         [<Test>]
-        member x.```hotolei64/letohoi64``() =
-            lei64 |> should equal (hotolei64 (letohoi64 lei64))
-
+        member x.```hotolei64/letohoi64``() = lei64 |> should equal (hotolei64 (letohoi64 lei64))
+        
         [<Test>]
-        member x.```hotoleu16/letohou16``() =
-            leu16 |> should equal (hotoleu16 (letohou16 leu16))
-
+        member x.```hotoleu16/letohou16``() = leu16 |> should equal (hotoleu16 (letohou16 leu16))
+        
         [<Test>]
-        member x.```hotoleu32/letohou32``() =
-            leu32 |> should equal (hotoleu32 (letohou32 leu32))
-
+        member x.```hotoleu32/letohou32``() = leu32 |> should equal (hotoleu32 (letohou32 leu32))
+        
         [<Test>]
-        member x.```hotoleu64/letohou64``() =
-            leu64 |> should equal (hotoleu64 (letohou64 leu64))
-
+        member x.```hotoleu64/letohou64``() = leu64 |> should equal (hotoleu64 (letohou64 leu64))
+        
         [<Test>]
-        member x.```hotobei16/betohoi16``() =
-            bei16 |> should equal (hotobei16 (betohoi16 bei16))
-
+        member x.```hotobei16/betohoi16``() = bei16 |> should equal (hotobei16 (betohoi16 bei16))
+        
         [<Test>]
-        member x.```hotobei32/betohoi32``() =
-            bei32 |> should equal (hotobei32 (betohoi32 bei32))
-
+        member x.```hotobei32/betohoi32``() = bei32 |> should equal (hotobei32 (betohoi32 bei32))
+        
         [<Test>]
-        member x.```hotobei64/betohoi64``() =
-            bei64 |> should equal (hotobei64 (betohoi64 bei64))
-
+        member x.```hotobei64/betohoi64``() = bei64 |> should equal (hotobei64 (betohoi64 bei64))
+        
         [<Test>]
-        member x.```hotobeu16/betohou16``() =
-            beu16 |> should equal (hotobeu16 (betohou16 beu16))
-
+        member x.```hotobeu16/betohou16``() = beu16 |> should equal (hotobeu16 (betohou16 beu16))
+        
         [<Test>]
-        member x.```hotobeu32/betohou32``() =
-            beu32 |> should equal (hotobeu32 (betohou32 beu32))
-
+        member x.```hotobeu32/betohou32``() = beu32 |> should equal (hotobeu32 (betohou32 beu32))
+        
         [<Test>]
-        member x.```hotobeu64/betohou64``() =
-            beu64 |> should equal (hotobeu64 (betohou64 beu64))
+        member x.```hotobeu64/betohou64``() = beu64 |> should equal (hotobeu64 (betohou64 beu64))

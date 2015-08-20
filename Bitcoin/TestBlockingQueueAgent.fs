@@ -68,7 +68,7 @@ module TestBlockingQueueAgent =
         [<Test>]
         member x.``Test queue with reader/writer async tasks (queueSize = 1000, messages = 1000)``() = 
             testQueueOfSize 1000 1000
-
+        
         [<Test>]
         member x.``Test queue with reader/writer async tasks (queueSize = 1001, messages = 1000)``() = 
             testQueueOfSize 1001 1000

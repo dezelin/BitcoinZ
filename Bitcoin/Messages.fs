@@ -29,12 +29,18 @@ module Messages =
         | VarIntShort of VarIntShort
         | VarInt32 of VarInt32
         | VarInt64 of VarInt64
-
-    let VarIntFromNumber64 (x : uint64) = 
+    
+    let VarIntFromNumber64(x : uint64) = 
         if x < 0xfdUL then VarIntByte { value = uint8 x }
-        elif x > 0xfdUL && x <= 0xffffUL then VarIntShort { marker = VarIntMarker.VarIntMarkerShort; value = uint16 x }
-        elif x <= 0xffffffffUL then VarInt32 { marker = VarIntMarker.VarIntMarkerInt32; value = uint32 x }
-        else VarInt64 { marker = VarIntMarker.VarIntMarkerInt64; value = uint64 x }
+        elif x > 0xfdUL && x <= 0xffffUL then 
+            VarIntShort { marker = VarIntMarker.VarIntMarkerShort
+                          value = uint16 x }
+        elif x <= 0xffffffffUL then 
+            VarInt32 { marker = VarIntMarker.VarIntMarkerInt32
+                       value = uint32 x }
+        else 
+            VarInt64 { marker = VarIntMarker.VarIntMarkerInt64
+                       value = uint64 x }
     
     let VarIntToNumber64(x : VarInt) = 
         match x with
