@@ -4,7 +4,7 @@ open System
 
 module ByteOrder = 
 
-    let seqRev xs = Seq.fold(fun acc x -> x::acc) [] xs
+    let private seqRev xs = Seq.fold(fun acc x -> x::acc) [] xs
     //
     // Convert from little-endian to host byte order
     //
