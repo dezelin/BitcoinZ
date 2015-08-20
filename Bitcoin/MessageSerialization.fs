@@ -51,7 +51,7 @@ module MessageSerialization =
     let internal deserializeNetAddr (array : byte []) index : NetAddr = 
         { time = deserializeu32 array index
           services = deserializeu64 array (index + 4)
-          ipv6_4 = array.[index + 12..index + 12 + 16] // slice 16 bytes starting from (index + 12)
+          ipv6_4 = array.[index + 12..index + 12 + 15] // slice 16 bytes starting from (index + 12)
           port = deserializeu16 array (index + 28) }
     
     let internal serializeNetAddrArray (addrs : NetAddr []) : byte [] = 

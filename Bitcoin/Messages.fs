@@ -7,7 +7,7 @@ module Messages =
         | VarIntMarkerShort = 0xfduy
         | VarIntMarkerInt32 = 0xfeuy
         | VarIntMarkerInt64 = 0xffuy
-
+    
     type VarIntByte = 
         { value : uint8 // Should be < 0xfd
                         }
@@ -30,7 +30,13 @@ module Messages =
         | VarInt32 of VarInt32
         | VarInt64 of VarInt64
 
-    let VarIntToInt64 (x: VarInt)  =
+    let VarIntFromNumber64 (x : uint64) = 
+        if x < 0xfdUL then VarIntByte { value = uint8 x }
+        elif x > 0xfdUL && x <= 0xffffUL then VarIntShort { marker = VarIntMarker.VarIntMarkerShort; value = uint16 x }
+        elif x <= 0xffffffffUL then VarInt32 { marker = VarIntMarker.VarIntMarkerInt32; value = uint32 x }
+        else VarInt64 { marker = VarIntMarker.VarIntMarkerInt64; value = uint64 x }
+    
+    let VarIntToNumber64(x : VarInt) = 
         match x with
         | VarIntByte v -> uint64 v.value
         | VarIntShort v -> uint64 v.value
@@ -43,6 +49,7 @@ module Messages =
                            }
     
     let internal NetAddrPayloadSize = 30
+    
     type NetAddr = 
         { // the Time (version >= 31402). Not present in version message.
           time : uint32
@@ -455,7 +462,7 @@ module Messages =
           // An ECDSA signature of the message
           signature : char [] // uchar[] in the protocol specification
                               }
-
+    
     type MessagePayload = 
         | MessageAddr of MessageAddr
         | MessageAlert of MessageAlert
